@@ -1,0 +1,58 @@
+# linear_regression_viz.ipynb
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# --- 1. Create Data ---
+# X = Square footage (Independent variable - must be 2D array for sklearn)
+X = np.array([[1000], [1500], [2000], [2500], [3000], [1200], [2200], [2800]]) 
+# y = House Price in $1000s (Dependent variable)
+y = np.array([300, 400, 500, 600, 720, 350, 550, 680]) 
+
+# --- 2. Fit the Model ---
+model = LinearRegression()
+model.fit(X, y)
+
+# Get the parameters (Beta_0 and Beta_1)
+intercept = model.intercept_
+coefficient = model.coef_[0]
+
+# Generate predictions for the line of best fit
+y_pred = model.predict(X)
+
+# --- 3. Output Model Results ---
+print("--- Model Parameters ---")
+print(f"Intercept (β₀): {intercept:.2f} (k)")
+print(f"Coefficient (β₁): {coefficient:.2f} (k per sq.ft)")
+print("\n--- Interpretation ---")
+print(f"The baseline house price (0 sq.ft) is estimated at ${intercept * 1000:.0f}.")
+print(f"For every 1 sq.ft increase, the price is estimated to increase by ${coefficient * 1000:.0f}.")
+
+# --- 4. Visualize Results using Matplotlib ---
+plt.figure(figsize=(10, 6))
+
+# Plot the actual data points
+plt.scatter(X, y, color='blue', label='Actual House Prices', s=50)
+
+# Plot the regression line
+plt.plot(X, y_pred, color='red', linewidth=2, label='Regression Line (Best Fit)')
+
+# Add labels and title
+plt.title('Simple Linear Regression: Square Footage vs. House Price', fontsize=16)
+plt.xlabel('Square Footage (sq.ft)', fontsize=12)
+plt.ylabel('House Price (in $1000s)', fontsize=12)
+
+# Add the equation to the plot
+equation = f'y = {coefficient:.2f}x + {intercept:.2f}'
+plt.text(1050, 650, equation, fontsize=14, color='red')
+
+# Show legend and grid
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.7)
+
+# Save the figure (optional, but good for GitHub)
+plt.savefig('linear_regression_plot.png')
+
+# Display the plot
+plt.show()
